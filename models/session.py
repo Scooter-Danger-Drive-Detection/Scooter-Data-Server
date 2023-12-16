@@ -3,7 +3,7 @@ from models import SafeRideMode, UnsafeRideMode
 
 class Session:
     def __init__(self, data):
-        self.session_id = data.get("ID")
+        self.session_id = data.get("SessionID")
         self.user_id = data.get("UserID")
         self.ride_mode = None
         ride_mode_id = data.get("RideMode")

@@ -24,7 +24,7 @@ class FrameTable:
 
         cur = db.cursor()
         cur.execute("CREATE TABLE IF NOT EXISTS user("
-                    "frame_id INTEGER, "
+                    "frame_id INTEGER PRIMARY KEY AUTOINCREMENT, "
                     "session_id INTEGER, "
                     "last_frame_id INTEGER, "
                     "time INTEGER, "
@@ -43,7 +43,7 @@ class FrameTable:
         db.commit()
         db.close()
 
-    def add_frame(self, frame: Frame):
+    def add_frame(self, frame: Frame) -> int:
         db = sql.connect(self.db_name)
         cur = db.cursor()
 
@@ -66,8 +66,10 @@ class FrameTable:
                         frame.gyroscope.rotation_delta_y,
                         frame.gyroscope.rotation_delta_z,
                     ))
+        frame_id = cur.lastrowid
         db.commit()
         db.close()
+        return frame_id
 
 
 class SessionTable:
@@ -78,13 +80,13 @@ class SessionTable:
 
         cur = db.cursor()
         cur.execute("CREATE TABLE IF NOT EXISTS session("
-                    "session_id INTEGER, "
+                    "session_id INTEGER PRIMARY KEY AUTOINCREMENT, "
                     "user_id INTEGER, "
                     "ride_mode INTEGER)",)
         db.commit()
         db.close()
 
-    def add_session(self, session: Session):
+    def add_session(self, session: Session) -> int:
         db = sql.connect(self.db_name)
 
         cur = db.cursor()
@@ -94,5 +96,7 @@ class SessionTable:
                         session.user_id,
                         0 if isinstance(session.ride_mode, SafeRideMode) else (1 if session.ride_mode.alone else 2),
                     ))
+        session_id = cur.lastrowid
         db.commit()
         db.close()
+        return session_id
