@@ -23,8 +23,9 @@ class FrameTable:
         db = sql.connect(db_name)
 
         cur = db.cursor()
-        cur.execute("CREATE TABLE IF NOT EXISTS user("
-                    "frame_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+        cur.execute("CREATE TABLE IF NOT EXISTS frame("
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    "frame_id INTEGER, "
                     "session_id INTEGER, "
                     "last_frame_id INTEGER, "
                     "time INTEGER, "
@@ -47,8 +48,9 @@ class FrameTable:
         db = sql.connect(self.db_name)
         cur = db.cursor()
 
-        cur.execute("INSERT INTO user VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        cur.execute("INSERT INTO frame VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     (
+                        None,
                         frame.id.frame,
                         frame.id.session,
                         frame.id.last_frame,
