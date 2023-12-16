@@ -1,19 +1,6 @@
 import sqlite3 as sql
 
-from models import Request, Session, Frame
-from models.ride_mode import SafeRideMode
-
-
-class DataBase:
-    def __init__(self, db_name):
-        self.db_name = db_name
-        self.frame_table = FrameTable(db_name)
-        self.session_table = SessionTable(db_name)
-
-    def add_request(self, request: Request):
-        for frame in request.frames:
-            self.frame_table.add_frame(frame)
-        self.session_table.add_session(request.session)
+from models import Frame
 
 
 class FrameTable:
@@ -72,33 +59,3 @@ class FrameTable:
         db.commit()
         db.close()
         return frame_id
-
-
-class SessionTable:
-    def __init__(self, db_name: str):
-        self.db_name = db_name
-
-        db = sql.connect(db_name)
-
-        cur = db.cursor()
-        cur.execute("CREATE TABLE IF NOT EXISTS session("
-                    "session_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                    "user_id INTEGER, "
-                    "ride_mode INTEGER)",)
-        db.commit()
-        db.close()
-
-    def add_session(self, session: Session) -> int:
-        db = sql.connect(self.db_name)
-
-        cur = db.cursor()
-        cur.execute("INSERT INTO session VALUES(?, ?, ?)",
-                    (
-                        session.session_id,
-                        session.user_id,
-                        0 if isinstance(session.ride_mode, SafeRideMode) else (1 if session.ride_mode.alone else 2),
-                    ))
-        session_id = cur.lastrowid
-        db.commit()
-        db.close()
-        return session_id
