@@ -1,5 +1,5 @@
 from load import app, database
-from flask import request
+from flask import request, make_response
 
 from models import Request
 
@@ -9,6 +9,7 @@ def create_frame():
     data = request.json
     request_obj = Request(data)
     database.add_request(request_obj)
+    return "200"
 
 
 if __name__ == "__main__":

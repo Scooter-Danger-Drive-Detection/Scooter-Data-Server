@@ -8,4 +8,4 @@ app.config['SECRET_KEY'] = '>#s!-R>yAI0M4%dpsQQ>6(!h{ljfIsdPBk`}82[,z|7:SOOHn<^y
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-database = DataBase()
+database = DataBase("database.db")

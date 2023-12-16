@@ -5,16 +5,10 @@ from models.ride_mode import SafeRideMode
 
 
 class DataBase:
-    def __init__(self):
-        self.db = sql.connect("data/database.db")
-        self.frame_table = FrameTable(self)
-        self.session_table = SessionTable(self)
-
-    def cursor(self):
-        return self.db.cursor()
-
-    def commit(self):
-        self.db.commit()
+    def __init__(self, db_name):
+        self.db_name = db_name
+        self.frame_table = FrameTable(db_name)
+        self.session_table = SessionTable(db_name)
 
     def add_request(self, request: Request):
         for frame in request.frames:
@@ -23,10 +17,12 @@ class DataBase:
 
 
 class FrameTable:
-    def __init__(self, db: DataBase):
-        self.db = db
+    def __init__(self, db_name: str):
+        self.db_name = db_name
 
-        cur = self.db.cursor()
+        db = sql.connect(db_name)
+
+        cur = db.cursor()
         cur.execute("CREATE TABLE IF NOT EXISTS user("
                     "frame_id INTEGER, "
                     "session_id INTEGER, "
@@ -44,12 +40,14 @@ class FrameTable:
                     "rotation_delta_x REAL, "
                     "rotation_delta_y REAL, "
                     "rotation_delta_z REAL) ")
-        self.db.commit()
+        db.commit()
+        db.close()
 
     def add_frame(self, frame: Frame):
-        cur = self.db.cursor()
+        db = sql.connect(self.db_name)
+        cur = db.cursor()
 
-        cur.execute("INSERT INTO user VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        cur.execute("INSERT INTO user VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     (
                         frame.id.frame,
                         frame.id.session,
@@ -68,27 +66,33 @@ class FrameTable:
                         frame.gyroscope.rotation_delta_y,
                         frame.gyroscope.rotation_delta_z,
                     ))
-        self.db.commit()
+        db.commit()
+        db.close()
 
 
 class SessionTable:
-    def __init__(self, db: DataBase):
-        self.db = db.db
+    def __init__(self, db_name: str):
+        self.db_name = db_name
 
-        cur = self.db.cursor()
+        db = sql.connect(db_name)
+
+        cur = db.cursor()
         cur.execute("CREATE TABLE IF NOT EXISTS session("
                     "session_id INTEGER, "
                     "user_id INTEGER, "
                     "ride_mode INTEGER)",)
-        self.db.commit()
+        db.commit()
+        db.close()
 
     def add_session(self, session: Session):
-        cur = self.db.cursor()
+        db = sql.connect(self.db_name)
 
+        cur = db.cursor()
         cur.execute("INSERT INTO session VALUES(?, ?, ?)",
                     (
                         session.session_id,
                         session.user_id,
-                        0 if session.ride_mode is SafeRideMode else 1 if session.ride_mode.alone else 2,
+                        0 if isinstance(session.ride_mode, SafeRideMode) else (1 if session.ride_mode.alone else 2),
                     ))
-        self.db.commit()
+        db.commit()
+        db.close()
