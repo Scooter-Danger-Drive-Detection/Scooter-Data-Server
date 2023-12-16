@@ -1,9 +1,9 @@
 class Frame:
     class ID:
         def __init__(self, data):
-            self.frame = data.get("FrameId")
-            self.session = data.get("SessionId")
-            self.last_frame = data.get("LastFrame")
+            self.frame = data.get("FrameID")
+            self.session = data.get("SessionID")
+            self.last_frame = data.get("LastFrameID")
 
     class GPS:
         def __init__(self, data):
@@ -29,6 +29,7 @@ class Frame:
 
     def __init__(self, data):
         self.id = Frame.ID(data.get("ID"))
-        self.GPS = Frame.GPS(data.get("GPS"))
+        self.time = data.get("Time")
+        self.gps = Frame.GPS(data.get("GPS"))
         self.accelerometer = Frame.Accelerometer(data.get("Accelerometer"))
-        self.Gyroscope = Frame.Gyroscope(data.get("Gyroscope"))
+        self.gyroscope = Frame.Gyroscope(data.get("Gyroscope"))
