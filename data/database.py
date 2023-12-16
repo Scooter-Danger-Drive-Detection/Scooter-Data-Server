@@ -1,9 +1,7 @@
 import sqlite3 as sql
 
-from controllers.frame import Frame
-from controllers.request import Request
-from controllers.ride_mode import SafeRideMode
-from controllers.session import Session
+from models import Request, Session, Frame
+from models.ride_mode import SafeRideMode
 
 
 class DataBase:
