@@ -23,7 +23,7 @@ class DataBase:
 
 
 class FrameTable:
-    def __int__(self, db: DataBase):
+    def __init__(self, db: DataBase):
         self.db = db
 
         cur = self.db.cursor()
@@ -31,19 +31,19 @@ class FrameTable:
                     "frame_id INTEGER, "
                     "session_id INTEGER, "
                     "last_frame_id INTEGER, "
-                    "time: INTEGER, "
-                    "speed: REAL, "
-                    "longitude: REAL, "
-                    "latitude: REAL, "
-                    "accelerometer_x: REAL, "
-                    "accelerometer_y: REAL, "
-                    "accelerometer_z: REAL, "
-                    "gravity_x: REAL, "
-                    "gravity_y: REAL, "
-                    "gravity_z: REAL, "
-                    "rotation_delta_x: REAL, "
-                    "rotation_delta_y: REAL, "
-                    "rotation_delta_z: REAL) ")
+                    "time INTEGER, "
+                    "speed REAL, "
+                    "longitude REAL, "
+                    "latitude REAL, "
+                    "accelerometer_x REAL, "
+                    "accelerometer_y REAL, "
+                    "accelerometer_z REAL, "
+                    "gravity_x REAL, "
+                    "gravity_y REAL, "
+                    "gravity_z REAL, "
+                    "rotation_delta_x REAL, "
+                    "rotation_delta_y REAL, "
+                    "rotation_delta_z REAL) ")
         self.db.commit()
 
     def add_frame(self, frame: Frame):
@@ -72,14 +72,14 @@ class FrameTable:
 
 
 class SessionTable:
-    def __int__(self, db: DataBase):
+    def __init__(self, db: DataBase):
         self.db = db.db
 
         cur = self.db.cursor()
         cur.execute("CREATE TABLE IF NOT EXISTS session("
-                    "session_id: INTEGER, "
-                    "user_id: INTEGER, "
-                    "ride_mode: INTEGER",)
+                    "session_id INTEGER, "
+                    "user_id INTEGER, "
+                    "ride_mode INTEGER)",)
         self.db.commit()
 
     def add_session(self, session: Session):

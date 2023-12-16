@@ -1,4 +1,4 @@
-from controllers.ride_mode import SafeRideMode, UnsafeRideMode
+from models import SafeRideMode, UnsafeRideMode
 
 
 class Session:

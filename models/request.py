@@ -1,5 +1,4 @@
-from controllers.frame import Frame
-from controllers.session import Session
+from models import Frame, Session
 
 
 class Request:
