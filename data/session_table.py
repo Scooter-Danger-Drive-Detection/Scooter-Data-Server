@@ -17,8 +17,8 @@ class SessionTable:
         cur = db.cursor()
         cur.execute("CREATE TABLE IF NOT EXISTS session("
                     "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                    "user_id INTEGER, "
                     "session_id INTEGER, "
+                    "user_id INTEGER, "
                     "ride_mode INTEGER, "
                     "CONSTRAINT id_constraint UNIQUE(user_id, session_id))")
         db.commit()
@@ -31,8 +31,8 @@ class SessionTable:
         cur.execute("INSERT INTO session VALUES(?, ?, ?, ?)",
                     (
                         None,
-                        session.user_id,
                         session.session_id,
+                        session.user_id,
                         session.ride_mode.key
                     ))
         session_id = cur.lastrowid

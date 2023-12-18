@@ -49,7 +49,7 @@ def save_session_data():
     try:
         session.session_db_id = session_table.add_session(session)
     except sqlite3.IntegrityError:
-        pass
+        session = session_table.get_session_by_session_id_and_user_id(session.session_id, session.user_id)
 
     for frame_data in data.get("Frames"):
         gps_data = frame_data.get("GPS")
