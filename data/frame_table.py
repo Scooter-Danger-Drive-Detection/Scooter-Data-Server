@@ -49,7 +49,7 @@ class FrameTable:
                     "angle_speed_x REAL, "
                     "angle_speed_y REAL, "
                     "angle_speed_z REAL, "
-                    "PRIMARY KEY(frame_id, session_id))")
+                    "CONSTRAINT id_constraint PRIMARY KEY(frame_id, session_id))")
         db.commit()
         db.close()
 

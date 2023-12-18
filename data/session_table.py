@@ -19,7 +19,8 @@ class SessionTable:
                     "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                     "user_id INTEGER, "
                     "session_id INTEGER, "
-                    "ride_mode INTEGER)")
+                    "ride_mode INTEGER, "
+                    "CONSTRAINT id_constraint UNIQUE(user_id, session_id))")
         db.commit()
         db.close()
 
