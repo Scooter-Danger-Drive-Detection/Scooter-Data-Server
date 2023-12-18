@@ -4,11 +4,13 @@ class RideMode:
 
 class SafeRideMode(RideMode):
     def __init__(self):
+        super(SafeRideMode, self).__init__()
         self.key = 0
 
 
 class UnsafeRideMode(RideMode):
     def __init__(self, alone: bool):
+        super(UnsafeRideMode, self).__init__()
         self.alone = alone
         if alone:
             self.key = 1
@@ -18,7 +20,7 @@ class UnsafeRideMode(RideMode):
 
 def get_ride_mode_by_key(key: int):
     ride_modes = {
-        0: SafeRideMode,
+        0: SafeRideMode(),
         1: UnsafeRideMode(alone=True),
         2: UnsafeRideMode(alone=False)
     }

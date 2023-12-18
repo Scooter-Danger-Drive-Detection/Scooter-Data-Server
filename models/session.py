@@ -2,7 +2,7 @@ from models.ride_mode import RideMode
 
 
 class Session:
-    def __init__(self, session_id: int, user_id: int, ride_mode: RideMode, session_db_id=1):
+    def __init__(self, session_id: int, user_id: int, ride_mode: RideMode, session_db_id=-1):
         self.session_id = session_id
         self.user_id = user_id
         self.ride_mode = ride_mode

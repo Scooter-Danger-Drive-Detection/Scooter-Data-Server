@@ -81,7 +81,7 @@ class FrameTable:
         db.commit()
         db.close()
 
-    def get_all_frames(self, sessions: list[Session]) -> list:
+    def get_all_frames(self, sessions: list[Session]) -> list[Frame]:
         db = sql.connect(self.db_name)
 
         cur = db.cursor()

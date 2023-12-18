@@ -12,7 +12,7 @@ def create_frame():
 @app.route("/GetAll", methods=["GET"])
 def get_all():
     sessions = session_table.get_all_sessions()
-    frames = frame_table.get_all_frames()
+    frames = frame_table.get_all_frames(sessions)
 
     return {
         "Sessions": [

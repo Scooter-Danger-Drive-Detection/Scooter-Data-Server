@@ -1,10 +1,10 @@
 import sqlite3 as sql
 
-from models import Session
+from models import Session, get_ride_mode_by_key
 
 
 def make_session_by_row(row):
-    session = Session(*row[1:], row[0])
+    session = Session(row[1], row[2], get_ride_mode_by_key(row[3]), row[0])
     return session
 
 
