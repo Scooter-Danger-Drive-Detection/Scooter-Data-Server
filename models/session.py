@@ -7,3 +7,10 @@ class Session:
         self.user_id = user_id
         self.ride_mode = ride_mode
         self.session_db_id = session_db_id
+
+    def to_dict(self) -> dict:
+        return {
+            "SessionID": self.session_id,
+            "UserID": self.user_id,
+            "RideMode": self.ride_mode.key
+        }
