@@ -53,3 +53,4 @@ def save_session_data():
         frame = Frame(frame_data.get("FrameID"), frame_data.get("SessionID"), frame_data.get("PreviousFrameID"),
                       frame_data.get("Time"), gps, accelerometer, gyroscope)
         frame_table.add_frame(frame, session)
+    return "200"
