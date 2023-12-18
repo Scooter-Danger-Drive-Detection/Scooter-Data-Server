@@ -32,7 +32,8 @@ def get_frames_count():
 
 @app.route("/StartSession", methods=["POST"])
 def start_session():
-    data = request.json
+    global previous_data
+    previous_data = data = request.json
     return json.dumps({"SessionID": session_table.add_session(Session(data.get("SessionID"), data.get("UserID"),
                                                                       get_ride_mode_by_key(data.get("RideMode"))))})
 
