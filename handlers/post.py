@@ -1,4 +1,5 @@
 import json
+import sqlite3
 
 from flask import request
 
@@ -33,7 +34,10 @@ def save_session_data():
     session_data = data.get("Session")
     session = Session(session_data.get("SessionID"), session_data.get("UserID"),
                       get_ride_mode_by_key(session_data.get("RideMode")))
-    session.session_db_id = session_table.add_session(session)
+    try:
+        session.session_db_id = session_table.add_session(session)
+    except sqlite3.IntegrityError:
+        pass
 
     for frame_data in data.get("Frames"):
         gps_data = frame_data.get("GPS")
@@ -55,5 +59,8 @@ def save_session_data():
 
         frame = Frame(frame_data.get("FrameID"), frame_data.get("SessionID"), frame_data.get("PreviousFrameID"),
                       frame_data.get("Time"), gps, accelerometer, gyroscope)
-        frame_table.add_frame(frame, session)
+        try:
+            frame_table.add_frame(frame, session)
+        except sqlite3.IntegrityError:
+            pass
     return "200"
