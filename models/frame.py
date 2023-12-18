@@ -23,9 +23,9 @@ class Frame:
 
     class Gyroscope:
         def __init__(self, data):
-            self.rotation_delta_x = data.get("RotationDeltaX")
-            self.rotation_delta_y = data.get("RotationDeltaY")
-            self.rotation_delta_z = data.get("RotationDeltaZ")
+            self.rotation_delta_matrix = list()
+            for rotation_delta in data.get("RotationDeltaMatrix"):
+                self.rotation_delta_matrix.append(rotation_delta)
 
     def __init__(self, data):
         self.id = Frame.ID(data.get("ID"))
