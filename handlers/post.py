@@ -8,9 +8,18 @@ from models import Session, Frame
 from models.ride_mode import get_ride_mode_by_key
 
 
+previous_data = str()
+
+
+@app.route("/", methods=["GET"])
+def echo():
+    return previous_data
+
+
 @app.route("/GetFramesCount", methods=["POST"])
 def get_frames_count():
-    data = request.json
+    global previous_data
+    previous_data = data = request.json
     session_id = data.get("SessionID")
     user_id = data.get("UserID")
     try:
@@ -29,7 +38,8 @@ def start_session():
 
 @app.route("/SaveSession", methods=["POST"])
 def save_session_data():
-    data = request.json
+    global previous_data
+    previous_data = data = request.json
 
     session_data = data.get("Session")
     session = Session(session_data.get("SessionID"), session_data.get("UserID"),
