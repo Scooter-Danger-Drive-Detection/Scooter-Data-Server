@@ -4,6 +4,19 @@ from load import session_table
 from models import Frame, Session
 
 
+def make_frame_by_row(row):
+    gps = Frame.GPS(*row[4:7])
+
+    accelerometer = Frame.Accelerometer(*row[7:13])
+
+    gyroscope = Frame.Gyroscope(row[13:22], *row[22:25])
+
+    frame = Frame(row[0], row[1], row[2], row[3],
+                  gps, accelerometer, gyroscope)
+
+    return frame
+
+
 class FrameTable:
     def __init__(self, db_name: str):
         self.db_name = db_name
@@ -78,17 +91,8 @@ class FrameTable:
 
         for session in sessions:
             cur.execute("SELECT * FROM frame WHERE session_id=?", (session.session_db_id,))
-            for frame_data in cur.fetchall():
-                gps = Frame.GPS(*frame_data[4:7])
-
-                accelerometer = Frame.Accelerometer(*frame_data[7:13])
-
-                gyroscope = Frame.Gyroscope(frame_data[13:22], *frame_data[22:25])
-
-                frame = Frame(frame_data[0], frame_data[1], frame_data[2], frame_data[3],
-                              gps, accelerometer, gyroscope)
-
-                frames.append(frame)
+            for row in cur.fetchall():
+                frames.append(make_frame_by_row(row))
 
         db.close()
 

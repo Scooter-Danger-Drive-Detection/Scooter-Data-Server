@@ -3,6 +3,11 @@ import sqlite3 as sql
 from models import Session
 
 
+def make_session_by_row(row):
+    session = Session(*row[1:], row[0])
+    return session
+
+
 class SessionTable:
     def __init__(self, db_name: str):
         self.db_name = db_name
@@ -44,7 +49,6 @@ class SessionTable:
         db.close()
 
         sessions = list()
-        for session_data in rows:
-            session = Session(*session_data[1:], session_data[0])
-            sessions.append(session)
+        for row in rows:
+            sessions.append(make_session_by_row(row))
         return sessions
