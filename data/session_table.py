@@ -52,3 +52,14 @@ class SessionTable:
         for row in rows:
             sessions.append(make_session_by_row(row))
         return sessions
+
+    def get_session_by_session_id_and_user_id(self, session_id: int, user_id: int) -> Session:
+        db = sql.connect(self.db_name)
+
+        cur = db.cursor()
+        cur.execute("SELECT * FROM session WHERE session_id=? AND user_id=?", (session_id, user_id))
+        rows = cur.fetchall()
+
+        db.close()
+
+        return make_session_by_row(rows[0])

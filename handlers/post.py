@@ -7,6 +7,16 @@ from models import Session, Frame
 from models.ride_mode import get_ride_mode_by_key
 
 
+@app.route("/GetFramesCount", methods=["POST"])
+def get_frames_count():
+    data = request.json
+    session_id = data.get("SessionID")
+    user_id = data.get("UserID")
+    session = session_table.get_session_by_session_id_and_user_id(session_id, user_id)
+    frames = frame_table.get_frames_by_session(session)
+    return f"{len(frames)}"
+
+
 @app.route("/StartSession", methods=["POST"])
 def start_session():
     data = request.json

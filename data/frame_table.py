@@ -97,3 +97,16 @@ class FrameTable:
         db.close()
 
         return frames
+
+    def get_frames_by_session(self, session: Session) -> list[Frame]:
+        db = sql.connect(self.db_name)
+
+        cur = db.cursor()
+        cur.execute("SELECT * FROM frame WHERE session_id=?", (session.session_db_id,))
+        rows = cur.fetchall()
+        db.close()
+
+        frames = list()
+        for row in rows:
+            frames.append(make_frame_by_row(row))
+        return frames
