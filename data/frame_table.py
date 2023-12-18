@@ -1,6 +1,5 @@
 import sqlite3 as sql
 
-from load import session_table
 from models import Frame, Session
 
 
@@ -49,7 +48,7 @@ class FrameTable:
                     "rotation_delta_matrix_8 REAL, "
                     "angle_speed_x REAL, "
                     "angle_speed_y REAL, "
-                    "angle_speed_z REAL "
+                    "angle_speed_z REAL, "
                     "PRIMARY KEY(frame_id, session_id))")
         db.commit()
         db.close()
