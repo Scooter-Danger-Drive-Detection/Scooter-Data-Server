@@ -1,6 +1,7 @@
 import sqlite3 as sql
 
-from models import Frame
+from load import session_table
+from models import Frame, Session
 
 
 class FrameTable:
@@ -11,10 +12,9 @@ class FrameTable:
 
         cur = db.cursor()
         cur.execute("CREATE TABLE IF NOT EXISTS frame("
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                     "frame_id INTEGER, "
                     "session_id INTEGER, "
-                    "last_frame_id INTEGER, "
+                    "previous_frame_id INTEGER, "
                     "time INTEGER, "
                     "speed REAL, "
                     "longitude REAL, "
@@ -37,21 +37,20 @@ class FrameTable:
                     "angle_speed_x REAL, "
                     "angle_speed_y REAL, "
                     "angle_speed_z REAL "
-                    ") ")
+                    "PRIMARY KEY(frame_id, session_id))")
         db.commit()
         db.close()
 
-    def add_frame(self, frame: Frame) -> int:
+    def add_frame(self, frame: Frame, session: Session):
         db = sql.connect(self.db_name)
         cur = db.cursor()
 
         cur.execute("INSERT INTO frame "
-                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    f"VALUES({ '. '.join(['?'] * 25) })",
                     (
-                        None,
-                        frame.id.frame,
-                        frame.id.session,
-                        frame.id.last_frame,
+                        frame.frame_id,
+                        session.session_db_id,
+                        frame.previous_frame_id,
                         frame.time,
                         frame.gps.speed,
                         frame.gps.longitude,
@@ -67,7 +66,30 @@ class FrameTable:
                         frame.gyroscope.angle_speed_y,
                         frame.gyroscope.angle_speed_z
                     ))
-        frame_id = cur.lastrowid
         db.commit()
         db.close()
-        return frame_id
+
+    def get_all_frames(self, sessions: list[Session]) -> list:
+        db = sql.connect(self.db_name)
+
+        cur = db.cursor()
+
+        frames = list()
+
+        for session in sessions:
+            cur.execute("SELECT * FROM frame WHERE session_id=?", (session.session_db_id,))
+            for frame_data in cur.fetchall():
+                gps = Frame.GPS(*frame_data[4:7])
+
+                accelerometer = Frame.Accelerometer(*frame_data[7:13])
+
+                gyroscope = Frame.Gyroscope(frame_data[13:22], *frame_data[22:25])
+
+                frame = Frame(frame_data[0], frame_data[1], frame_data[2], frame_data[3],
+                              gps, accelerometer, gyroscope)
+
+                frames.append(frame)
+
+        db.close()
+
+        return frames

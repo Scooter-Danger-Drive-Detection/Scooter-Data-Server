@@ -1,7 +1,6 @@
 import sqlite3 as sql
 
 from models import Session
-from models.ride_mode import SafeRideMode
 
 
 class SessionTable:
@@ -12,9 +11,10 @@ class SessionTable:
 
         cur = db.cursor()
         cur.execute("CREATE TABLE IF NOT EXISTS session("
-                    "session_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                     "user_id INTEGER, "
-                    "ride_mode INTEGER)",)
+                    "session_id INTEGER, "
+                    "ride_mode INTEGER)")
         db.commit()
         db.close()
 
@@ -22,13 +22,29 @@ class SessionTable:
         db = sql.connect(self.db_name)
 
         cur = db.cursor()
-        cur.execute("INSERT INTO session VALUES(?, ?, ?)",
+        cur.execute("INSERT INTO session VALUES(?, ?, ?, ?)",
                     (
-                        session.session_id,
+                        None,
                         session.user_id,
-                        0 if isinstance(session.ride_mode, SafeRideMode) else (1 if session.ride_mode.alone else 2),
+                        session.session_id,
+                        session.ride_mode.key
                     ))
         session_id = cur.lastrowid
         db.commit()
         db.close()
         return session_id
+
+    def get_all_sessions(self) -> list:
+        db = sql.connect(self.db_name)
+
+        cur = db.cursor()
+        cur.execute("SELECT * FROM session")
+        rows = cur.fetchall()
+
+        db.close()
+
+        sessions = list()
+        for session_data in rows:
+            session = Session(*session_data[1:], session_data[0])
+            sessions.append(session)
+        return sessions

@@ -1,15 +1,9 @@
-from models import SafeRideMode, UnsafeRideMode
+from models.ride_mode import RideMode
 
 
 class Session:
-    def __init__(self, data):
-        self.session_id = data.get("SessionID")
-        self.user_id = data.get("UserID")
-        self.ride_mode = None
-        ride_mode_id = data.get("RideMode")
-        if ride_mode_id == 0:
-            self.ride_mode = SafeRideMode()
-        if ride_mode_id == 1:
-            self.ride_mode = UnsafeRideMode(alone=True)
-        if ride_mode_id == 2:
-            self.ride_mode = UnsafeRideMode(alone=False)
+    def __init__(self, session_id: int, user_id: int, ride_mode: RideMode, session_db_id=1):
+        self.session_id = session_id
+        self.user_id = user_id
+        self.ride_mode = ride_mode
+        self.session_db_id = session_db_id
