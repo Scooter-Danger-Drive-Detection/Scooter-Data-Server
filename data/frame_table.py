@@ -33,7 +33,11 @@ class FrameTable:
                     "rotation_delta_matrix_5 REAL, "
                     "rotation_delta_matrix_6 REAL, "
                     "rotation_delta_matrix_7 REAL, "
-                    "rotation_delta_matrix_8 REAL) ")
+                    "rotation_delta_matrix_8 REAL, "
+                    "angle_speed_x REAL, "
+                    "angle_speed_y REAL, "
+                    "angle_speed_z REAL "
+                    ") ")
         db.commit()
         db.close()
 
@@ -41,7 +45,8 @@ class FrameTable:
         db = sql.connect(self.db_name)
         cur = db.cursor()
 
-        cur.execute("INSERT INTO frame VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        cur.execute("INSERT INTO frame "
+                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     (
                         None,
                         frame.id.frame,
@@ -57,7 +62,10 @@ class FrameTable:
                         frame.accelerometer.gravity_x,
                         frame.accelerometer.gravity_y,
                         frame.accelerometer.gravity_z,
-                        *frame.gyroscope.rotation_delta_matrix
+                        *frame.gyroscope.rotation_delta_matrix,
+                        frame.gyroscope.angle_speed_x,
+                        frame.gyroscope.angle_speed_y,
+                        frame.gyroscope.angle_speed_z
                     ))
         frame_id = cur.lastrowid
         db.commit()

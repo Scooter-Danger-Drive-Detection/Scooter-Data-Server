@@ -26,6 +26,9 @@ class Frame:
             self.rotation_delta_matrix = list()
             for rotation_delta in data.get("RotationDeltaMatrix"):
                 self.rotation_delta_matrix.append(rotation_delta)
+            self.angle_speed_x = data.get("AngleSpeedX")
+            self.angle_speed_y = data.get("AngleSpeedY")
+            self.angle_speed_z = data.get("AngleSpeedZ")
 
     def __init__(self, data):
         self.id = Frame.ID(data.get("ID"))
