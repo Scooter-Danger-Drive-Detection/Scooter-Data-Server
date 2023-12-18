@@ -58,7 +58,7 @@ class FrameTable:
         cur = db.cursor()
 
         cur.execute("INSERT INTO frame "
-                    f"VALUES({ '. '.join(['?'] * 25) })",
+                    f"VALUES({ ', '.join(['?'] * 25) })",
                     (
                         frame.frame_id,
                         session.session_db_id,
