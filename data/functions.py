@@ -12,10 +12,12 @@ def connect_db(db_name):
         pass
     connection_is_open = True
     db = sql.connect(db_name)
+    print("Connection opened")
     return db
 
 
 def close_connection(db):
     global connection_is_open
     connection_is_open = False
+    print("Connection closed")
     db.close()
