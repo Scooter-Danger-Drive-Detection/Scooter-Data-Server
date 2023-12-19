@@ -1,5 +1,3 @@
-import sqlite3 as sql
-
 from data.functions import connect_db, close_connection
 from models import Session, get_ride_mode_by_key
 
@@ -25,7 +23,7 @@ class SessionTable:
         close_connection(db)
 
     def add_session(self, session: Session) -> int:
-        db = sql.connect(self.db_name)
+        db = connect_db(self.db_name)
 
         cur = db.cursor()
         cur.execute("INSERT INTO session VALUES(?, ?, ?, ?)",
