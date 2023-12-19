@@ -2,19 +2,7 @@ import sqlite3 as sql
 
 from data.functions import connect_db, close_connection
 from models import Frame, Session
-
-
-def make_frame_by_row(row, session_id: int):
-    gps = Frame.GPS(*row[4:7])
-
-    accelerometer = Frame.Accelerometer(*row[7:13])
-
-    gyroscope = Frame.Gyroscope(row[13:22], *row[22:25])
-
-    frame = Frame(row[0], session_id, row[2], row[3],
-                  gps, accelerometer, gyroscope)
-
-    return frame
+from parsers.row_to_model import frame_row_to_model
 
 
 class FrameTable:
@@ -102,7 +90,7 @@ class FrameTable:
                 try:
                     cur.execute("SELECT * FROM frame WHERE session_id=?", (session.session_db_id,))
                     for row in cur.fetchall():
-                        frames.append(make_frame_by_row(row, session.session_id))
+                        frames.append(frame_row_to_model(row, session.session_id))
                 except sql.IntegrityError:
                     pass
         except Exception as err:
@@ -125,5 +113,5 @@ class FrameTable:
 
         frames = list()
         for row in rows:
-            frames.append(make_frame_by_row(row, session.session_id))
+            frames.append(frame_row_to_model(row, session.session_id))
         return frames

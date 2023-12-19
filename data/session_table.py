@@ -1,10 +1,6 @@
 from data.functions import connect_db, close_connection
 from models import Session, get_ride_mode_by_key
-
-
-def make_session_by_row(row):
-    session = Session(row[1], row[2], get_ride_mode_by_key(row[3]), row[0])
-    return session
+from parsers.row_to_model import session_row_to_model
 
 
 class SessionTable:
@@ -57,7 +53,7 @@ class SessionTable:
 
         sessions = list()
         for row in rows:
-            sessions.append(make_session_by_row(row))
+            sessions.append(session_row_to_model(row))
         return sessions
 
     def get_session_by_session_id_and_user_id(self, session_id: int, user_id: int) -> Session:
@@ -71,4 +67,4 @@ class SessionTable:
             raise err
         close_connection(db)
 
-        return make_session_by_row(rows[0])
+        return session_row_to_model(rows[0])
