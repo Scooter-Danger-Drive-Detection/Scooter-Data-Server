@@ -1,5 +1,3 @@
-import sqlite3
-
 from data.functions import connect_db, close_connection
 from models import Session, get_ride_mode_by_key
 

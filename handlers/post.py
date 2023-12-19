@@ -1,5 +1,6 @@
 import json
 import sqlite3
+from time import time
 
 from flask import request
 
@@ -50,7 +51,7 @@ def save_session_data():
         session.session_db_id = session_table.add_session(session)
     except sqlite3.IntegrityError:
         session = session_table.get_session_by_session_id_and_user_id(session.session_id, session.user_id)
-
+    start_time = time()
     frames = list()
     for frame_data in data.get("Frames"):
         gps_data = frame_data.get("GPS")
@@ -74,4 +75,5 @@ def save_session_data():
                       frame_data.get("Time"), gps, accelerometer, gyroscope)
         frames.append(frame)
     frame_table.add_frames(frames, session)
+    print("--- %s seconds ---" % (time() - start_time))
     return "200"
