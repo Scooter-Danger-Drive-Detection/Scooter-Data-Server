@@ -53,32 +53,36 @@ class FrameTable:
         db.commit()
         db.close()
 
-    def add_frame(self, frame: Frame, session: Session):
+    def add_frames(self, frames: list[Frame], session: Session):
         db = sql.connect(self.db_name)
         cur = db.cursor()
 
-        cur.execute("INSERT INTO frame "
-                    f"VALUES({ ', '.join(['?'] * 25) })",
-                    (
-                        frame.frame_id,
-                        session.session_db_id,
-                        frame.previous_frame_id,
-                        frame.time,
-                        frame.gps.speed,
-                        frame.gps.longitude,
-                        frame.gps.latitude,
-                        frame.accelerometer.acceleration_x,
-                        frame.accelerometer.acceleration_y,
-                        frame.accelerometer.acceleration_z,
-                        frame.accelerometer.gravity_x,
-                        frame.accelerometer.gravity_y,
-                        frame.accelerometer.gravity_z,
-                        *frame.gyroscope.rotation_delta_matrix,
-                        frame.gyroscope.angle_speed_x,
-                        frame.gyroscope.angle_speed_y,
-                        frame.gyroscope.angle_speed_z
-                    ))
-        db.commit()
+        for frame in frames:
+            try:
+                cur.execute("INSERT INTO frame "
+                            f"VALUES({ ', '.join(['?'] * 25) })",
+                            (
+                                frame.frame_id,
+                                session.session_db_id,
+                                frame.previous_frame_id,
+                                frame.time,
+                                frame.gps.speed,
+                                frame.gps.longitude,
+                                frame.gps.latitude,
+                                frame.accelerometer.acceleration_x,
+                                frame.accelerometer.acceleration_y,
+                                frame.accelerometer.acceleration_z,
+                                frame.accelerometer.gravity_x,
+                                frame.accelerometer.gravity_y,
+                                frame.accelerometer.gravity_z,
+                                *frame.gyroscope.rotation_delta_matrix,
+                                frame.gyroscope.angle_speed_x,
+                                frame.gyroscope.angle_speed_y,
+                                frame.gyroscope.angle_speed_z
+                            ))
+                db.commit()
+            except sql.IntegrityError as err:
+                pass
         db.close()
 
     def get_all_frames(self, sessions: list[Session]) -> list[Frame]:

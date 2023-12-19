@@ -51,6 +51,7 @@ def save_session_data():
     except sqlite3.IntegrityError:
         session = session_table.get_session_by_session_id_and_user_id(session.session_id, session.user_id)
 
+    frames = list()
     for frame_data in data.get("Frames"):
         gps_data = frame_data.get("GPS")
         gps = Frame.GPS(gps_data.get("Speed"), gps_data.get("Longitude"), gps_data.get("Latitude"))
@@ -71,8 +72,6 @@ def save_session_data():
 
         frame = Frame(frame_data.get("FrameID"), frame_data.get("SessionID"), frame_data.get("PreviousFrameID"),
                       frame_data.get("Time"), gps, accelerometer, gyroscope)
-        try:
-            frame_table.add_frame(frame, session)
-        except sqlite3.IntegrityError:
-            pass
+        frames.append(frame)
+    frame_table.add_frames(frames, session)
     return "200"
