@@ -1,5 +1,6 @@
 import sqlite3 as sql
 
+from data.functions import connect_db, close_connection
 from models import Frame, Session
 
 
@@ -19,8 +20,7 @@ def make_frame_by_row(row, session_id: int):
 class FrameTable:
     def __init__(self, db_name: str):
         self.db_name = db_name
-
-        db = sql.connect(db_name)
+        db = connect_db(db_name)
 
         cur = db.cursor()
         cur.execute("CREATE TABLE IF NOT EXISTS frame("
@@ -51,10 +51,10 @@ class FrameTable:
                     "angle_speed_z REAL, "
                     "CONSTRAINT id_constraint PRIMARY KEY(frame_id, session_id))")
         db.commit()
-        db.close()
+        close_connection(db)
 
     def add_frames(self, frames: list[Frame], session: Session):
-        db = sql.connect(self.db_name)
+        db = connect_db(self.db_name)
         cur = db.cursor()
 
         for frame in frames:
@@ -83,10 +83,10 @@ class FrameTable:
                 db.commit()
             except sql.IntegrityError as err:
                 pass
-        db.close()
+        close_connection(db)
 
     def get_all_frames(self, sessions: list[Session]) -> list[Frame]:
-        db = sql.connect(self.db_name)
+        db = connect_db(self.db_name)
 
         cur = db.cursor()
 
@@ -97,17 +97,17 @@ class FrameTable:
             for row in cur.fetchall():
                 frames.append(make_frame_by_row(row, session.session_id))
 
-        db.close()
+        close_connection(db)
 
         return frames
 
     def get_frames_by_session(self, session: Session) -> list[Frame]:
-        db = sql.connect(self.db_name)
+        db = connect_db(self.db_name)
 
         cur = db.cursor()
         cur.execute("SELECT * FROM frame WHERE session_id=?", (session.session_id,))
         rows = cur.fetchall()
-        db.close()
+        close_connection(db)
 
         frames = list()
         for row in rows:

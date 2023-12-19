@@ -1,5 +1,6 @@
 import sqlite3 as sql
 
+from data.functions import connect_db, close_connection
 from models import Session, get_ride_mode_by_key
 
 
@@ -11,8 +12,7 @@ def make_session_by_row(row):
 class SessionTable:
     def __init__(self, db_name: str):
         self.db_name = db_name
-
-        db = sql.connect(db_name)
+        db = connect_db(db_name)
 
         cur = db.cursor()
         cur.execute("CREATE TABLE IF NOT EXISTS session("
@@ -22,7 +22,7 @@ class SessionTable:
                     "ride_mode INTEGER, "
                     "CONSTRAINT id_constraint UNIQUE(user_id, session_id))")
         db.commit()
-        db.close()
+        close_connection(db)
 
     def add_session(self, session: Session) -> int:
         db = sql.connect(self.db_name)
@@ -37,17 +37,17 @@ class SessionTable:
                     ))
         session_id = cur.lastrowid
         db.commit()
-        db.close()
+        close_connection(db)
         return session_id
 
     def get_all_sessions(self) -> list:
-        db = sql.connect(self.db_name)
+        db = connect_db(self.db_name)
 
         cur = db.cursor()
         cur.execute("SELECT * FROM session")
         rows = cur.fetchall()
 
-        db.close()
+        close_connection(db)
 
         sessions = list()
         for row in rows:
@@ -55,12 +55,12 @@ class SessionTable:
         return sessions
 
     def get_session_by_session_id_and_user_id(self, session_id: int, user_id: int) -> Session:
-        db = sql.connect(self.db_name)
+        db = connect_db(self.db_name)
 
         cur = db.cursor()
         cur.execute("SELECT * FROM session WHERE session_id=? AND user_id=?", (session_id, user_id))
         rows = cur.fetchall()
 
-        db.close()
+        close_connection(db)
 
         return make_session_by_row(rows[0])
