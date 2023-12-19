@@ -1,6 +1,6 @@
 from data.functions import connect_db, close_connection
 from models import Session, get_ride_mode_by_key
-from parsers.row_to_model import session_row_to_model
+from parsers import session_row_to_model
 
 
 class SessionTable:

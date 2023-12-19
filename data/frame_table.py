@@ -2,7 +2,7 @@ import sqlite3 as sql
 
 from data.functions import connect_db, close_connection
 from models import Frame, Session
-from parsers.row_to_model import frame_row_to_model
+from parsers import frame_row_to_model
 
 
 class FrameTable:
