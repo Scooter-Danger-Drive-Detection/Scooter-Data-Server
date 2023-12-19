@@ -116,7 +116,7 @@ class FrameTable:
         db = connect_db(self.db_name)
         try:
             cur = db.cursor()
-            cur.execute("SELECT * FROM frame WHERE session_id=?", (session.session_id,))
+            cur.execute("SELECT * FROM frame WHERE session_id=?", (session.session_db_id,))
             rows = cur.fetchall()
         except Exception as err:
             close_connection(db)
