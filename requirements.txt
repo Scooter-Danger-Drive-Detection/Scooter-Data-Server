@@ -6,4 +6,4 @@ flask-sockets
 psutil
 requests
 pandas
-sklearn
+scikit-learn
