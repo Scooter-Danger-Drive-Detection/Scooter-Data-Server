@@ -10,6 +10,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 db_name = "database.db"
+model_name = "model80.pickle"
 
 frame_table = FrameTable(db_name)
 session_table = SessionTable(db_name)

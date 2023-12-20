@@ -7,7 +7,8 @@ from flask import request
 from load import app, frame_table, session_table
 from models import Session, Frame
 from models.ride_mode import get_ride_mode_by_key
-from parsers import frame_json_to_model, session_json_to_model
+from parsers import frame_json_to_model, session_json_to_model, reorder_frames
+from prediction import get_prediction
 
 previous_data = str()
 
@@ -57,3 +58,19 @@ def save_session_data():
     frame_table.add_frames(frames, session)
     print("--- %s seconds ---" % (time() - start_time))
     return "200"
+
+
+@app.route("/Predict", methods=["POST"])
+def predict():
+    global previous_data
+    previous_data = data = request.json
+
+    session = session_json_to_model(data)
+    try:
+        session = session_table.get_session_by_session_id_and_user_id(session.session_id, session.user_id)
+    except IndexError as err:
+        return f"400\n{err}"
+    frames = frame_table.get_frames_by_session(session)
+    frames = reorder_frames(frames)
+    prediction = get_prediction(frames, session)
+    return str(prediction)

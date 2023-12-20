@@ -4,3 +4,6 @@ sqlalchemy
 flask-login
 flask-sockets
 psutil
+requests
+pandas
+sklearn

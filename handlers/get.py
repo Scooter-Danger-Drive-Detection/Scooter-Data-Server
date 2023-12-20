@@ -45,4 +45,3 @@ def execute_sql():
         return str(err)
     else:
         return response
-

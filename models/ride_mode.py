@@ -25,6 +25,8 @@ class TestRideMode(RideMode):
 
 
 def get_ride_mode_by_key(key: int):
+    if key is None:
+        return None
     ride_modes = {
         0: SafeRideMode(),
         1: UnsafeRideMode(alone=True),

@@ -1,3 +1,6 @@
+import math
+
+
 class Frame:
     class GPS:
         def __init__(self, speed: float, longitude: float, latitude: float):
@@ -23,6 +26,12 @@ class Frame:
             self.gravity_y = gravity_y
             self.gravity_z = gravity_z
 
+        @property
+        def total_acceleration(self):
+            return math.sqrt(self.acceleration_x ** 2 +
+                             self.acceleration_y ** 2 +
+                             self.acceleration_z ** 2)
+
         def to_dict(self) -> dict:
             return {
                 "AccelerationX": self.acceleration_x,
@@ -41,6 +50,12 @@ class Frame:
             self.angle_speed_x = angle_speed_x
             self.angle_speed_y = angle_speed_y
             self.angle_speed_z = angle_speed_z
+
+        @property
+        def total_angle_speed(self):
+            return math.sqrt(self.angle_speed_x ** 2 +
+                             self.angle_speed_y ** 2 +
+                             self.angle_speed_z ** 2)
 
         def to_dict(self) -> dict:
             return {
