@@ -14,7 +14,7 @@ def get_prediction_history():
 </head>
 <body>
 <h1>Session prediction history</h1>
-{" ".join('<p>' + str(session_id) + " " + str(prediction) + '</p >' for session_id, prediction in session_predictions)}
+{" ".join('<p>' + str(session.session_id) + ' ||| ' + str(-1 if session.ride_mode is None else session.ride_mode.key) + " ||| " + str(prediction) + '</p >' for session, prediction in session_predictions)}
 </body>
 </html>
 """

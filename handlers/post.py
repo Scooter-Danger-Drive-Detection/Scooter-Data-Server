@@ -73,5 +73,5 @@ def predict():
     frames = frame_table.get_frames_by_session(session)
     frames = reorder_frames(frames)
     prediction = get_prediction(frames, session)
-    session_predictions.append((session.session_id, prediction))
+    session_predictions.append((session, prediction))
     return str(prediction)
