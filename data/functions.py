@@ -1,5 +1,3 @@
-import os
-import psutil
 import sqlite3 as sql
 
 

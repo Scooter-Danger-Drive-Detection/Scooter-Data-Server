@@ -4,8 +4,8 @@ from time import time
 
 from flask import request
 
-from load import app, frame_table, session_table
-from models import Session, Frame
+from load import app, frame_table, session_table, session_predictions
+from models import Session
 from models.ride_mode import get_ride_mode_by_key
 from parsers import frame_json_to_model, session_json_to_model, reorder_frames
 from prediction import get_prediction
@@ -73,4 +73,5 @@ def predict():
     frames = frame_table.get_frames_by_session(session)
     frames = reorder_frames(frames)
     prediction = get_prediction(frames, session)
+    session_predictions.append((session.session_id, prediction))
     return str(prediction)

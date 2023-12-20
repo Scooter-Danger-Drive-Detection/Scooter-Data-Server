@@ -1,10 +1,10 @@
-import requests
 import json
+
+import pandas as pd
+import requests
 
 from models import Frame, FrameBatch, Session
 from parsers import frame_json_to_model, session_json_to_model
-
-import pandas as pd
 
 
 def reorder_frames(frames: list[Frame]):

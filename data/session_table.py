@@ -1,5 +1,5 @@
 from data.functions import connect_db, close_connection
-from models import Session, get_ride_mode_by_key
+from models import Session
 from parsers import session_row_to_model
 
 

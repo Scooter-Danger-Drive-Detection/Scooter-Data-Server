@@ -1,5 +1,5 @@
-from flask import Flask, render_template, redirect, request, jsonify
-from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from flask import Flask
+from flask_login import LoginManager
 
 from data.frame_table import FrameTable
 from data.session_table import SessionTable
@@ -14,3 +14,5 @@ model_name = "model80.pickle"
 
 frame_table = FrameTable(db_name)
 session_table = SessionTable(db_name)
+
+session_predictions = list()
