@@ -13,4 +13,4 @@ def get_prediction(frames: list[Frame], session: Session):
     batches = unite_frames_to_frame_batches(frames, session, batch_size)
     df = frame_batches_to_dataframe(batches)
     predicts = model.predict(df[parameters])
-    return sum(predicts) / len(predicts)
+    return 1 - sum(predicts) / len(predicts)
